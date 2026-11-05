@@ -1,0 +1,13 @@
+[project]
+name="qoder-byoc-sandbox-example"
+
+[qoder]
+base_url = "https://api.qoder.com/api/v1/cloud"
+
+[sandbox]
+analysis_template = "code-interpreter-v1"
+timeout_seconds = 3600
+
+[environment]
+type="self_hosted"
+tool_provider="qoder_byoc_sandbox_example.demos.report_analyst.worker_tools:create_tools"

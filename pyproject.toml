@@ -1,0 +1,26 @@
+[build-system]
+requires=["setuptools>=68"]
+build-backend="setuptools.build_meta"
+
+[project]
+name="qoder-byoc-sandbox-example"
+version="0.2.0"
+readme="README.md"
+description="Runnable BYOC integration example for Qoder Cloud Agents and Agent Sandbox"
+requires-python=">=3.11"
+license={text="Apache-2.0"}
+dependencies=["httpx==0.28.1","python-dotenv==1.2.2"]
+
+[project.optional-dependencies]
+sandbox=["e2b==2.35.0"]
+example=["e2b==2.35.0","aiohttp==3.14.5","playwright==1.55.0","pandas==2.3.3","plotly==6.3.1","openpyxl==3.1.5"]
+build=["e2b==2.35.0","alibabacloud-sandbox20260820==1.2.0"]
+
+[project.scripts]
+qoder-byoc-sandbox-example="qoder_byoc_sandbox_example.cli:main"
+
+[tool.setuptools.packages.find]
+where=["src"]
+
+[tool.setuptools.package-data]
+"qoder_byoc_sandbox_example.demos.report_analyst"=["web/*.html","web/*.css","web/*.js","web/*.svg","web/*.png","web/icons/*.svg","web/icons/*.md"]

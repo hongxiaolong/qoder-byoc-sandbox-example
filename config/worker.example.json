@@ -1,0 +1,9 @@
+{
+  "base_url": "https://api.qoder.com/api/v1/cloud",
+  "environment_id": "<Qoder Environment ID>",
+  "session_id": "<Qoder Session ID>",
+  "worker_id": "self-hosted-worker-1",
+  "workdir": "/workspace",
+  "state_dir": "/workspace/.worker",
+  "max_seconds": 840
+}

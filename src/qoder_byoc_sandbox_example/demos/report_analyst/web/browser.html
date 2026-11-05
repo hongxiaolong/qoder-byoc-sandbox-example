@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>浏览器执行 · Agent Sandbox 极速版</title><link rel="stylesheet" href="/assets/style.css"><script src="/assets/browser.js" defer></script></head>
+<body class="embedded-page">
+<main class="panel-content browser-content">
+  <div class="section-heading"><div><h1 class="section-title">云端浏览器</h1><p class="section-description">筛选、翻页和下载，均在 Browser Sandbox 中执行。</p></div><span class="badge" id="status">连接中</span></div>
+  <div class="frame-container">
+    <div class="frame-toolbar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="frame-caption">Browser Sandbox · Chromium</span><span class="frame-live" id="frame-live" hidden><i></i>实时画面</span></div>
+    <div class="frame-body" id="frame-body">
+      <img class="live-frame" id="frame" alt="Browser Sandbox 实时画面" hidden>
+      <div class="empty-state frame-empty" id="frame-empty"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="24" height="20" rx="3"/><path d="M4 12h24M9 9h.1M13 9h.1M13 17l5 3-5 3z"/></svg><strong id="frame-empty-title">正在连接浏览器</strong><p id="frame-empty-message">实例准备好后，这里会显示 Agent 的实际操作。</p><button class="button button-small" id="retry-frame" type="button">重新连接</button></div>
+      <div class="frame-paused" id="frame-paused" hidden>画面连接已中断，显示最近一次截图。正在重试。</div>
+    </div>
+  </div>
+  <section class="evidence-panel" aria-labelledby="evidence-title">
+    <div class="row between"><h2 id="evidence-title">文件传递证据</h2><span class="badge badge-outline" id="transfer-status">等待下载</span></div>
+    <div id="evidence-summary" class="evidence-summary"><p class="muted">下载完成后，将核对 Browser 与分析 Sandbox 的文件哈希。</p></div>
+    <details class="technical-details"><summary>查看实例与完整证据</summary><div id="identity" class="mono identity-list">正在读取实例信息</div><pre id="evidence" class="mono">暂无传递记录</pre></details>
+  </section>
+</main>
+</body>
+</html>

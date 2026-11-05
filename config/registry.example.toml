@@ -1,0 +1,7 @@
+repository="<实例名>-registry.cn-hangzhou.cr.aliyuncs.com/sandboxhub/qoder-byoc-sandbox-example"
+instance_id=""
+vpc_id=""
+vswitch_id=""
+security_group_id=""
+region="cn-hangzhou"
+team_id="<Sandbox Team ID>"

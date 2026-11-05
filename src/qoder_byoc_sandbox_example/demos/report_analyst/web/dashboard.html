@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>分析看板 · Agent Sandbox 极速版</title><link rel="stylesheet" href="/assets/style.css"><script src="/assets/plotly.min.js" defer></script><script src="/assets/dashboard.js" defer></script></head>
+<body class="embedded-page">
+<main class="panel-content dashboard-content">
+  <div class="section-heading"><div><span class="eyebrow">REPORT ANALYST</span><h1 class="section-title" id="title">等待第一轮分析</h1></div><span id="version" class="badge">待发布</span></div>
+  <p class="section-description dashboard-description" id="description">Qoder 执行分析后，数据、图表和导出文件会在这里自动更新。</p>
+  <div class="inline-alert" id="dashboard-error" role="status" hidden><span id="dashboard-error-text"></span><button class="button button-small" id="retry-dashboard" type="button">重试</button></div>
+  <div class="metric-grid" aria-label="分析指标">
+      <div class="metric"><small>数据条数</small><strong id="rows">—</strong><span>不含表头</span></div>
+    <div class="metric metric-amount"><small>金额合计</small><strong id="amount">—</strong><span id="amount-note">按当前统计范围</span></div>
+    <div class="metric"><small>分类数量</small><strong id="categories">—</strong><span>个分类</span></div>
+  </div>
+  <section class="chart-panel" aria-labelledby="category-title">
+    <div class="chart-heading"><h2 id="category-title">分类金额</h2><span class="muted" id="category-note">独立核算后发布</span></div>
+    <div class="chart-placeholder" id="chart-empty"><span class="placeholder-bar"></span><span class="placeholder-bar"></span><span class="placeholder-bar"></span><span class="placeholder-bar"></span><p>完成分析后显示分类对比</p></div>
+    <div class="chart category-chart" id="category" role="img" aria-label="各分类金额柱状图" hidden></div>
+  </section>
+  <section class="chart-panel" aria-labelledby="trend-title">
+    <div class="chart-heading"><h2 id="trend-title">每日趋势</h2><span class="muted">基于实际记录</span></div>
+    <div class="chart trend-chart" id="trend" role="img" aria-label="每日金额趋势图" hidden></div>
+    <div class="small-empty" id="trend-empty">等待分析结果</div>
+  </section>
+  <section class="exports-panel" aria-labelledby="exports-title">
+    <div class="row between"><h2 id="exports-title">交付文件</h2><span class="muted" id="export-status">完成分析后可下载</span></div>
+    <div class="download-grid">
+      <a class="download-link" data-file="/files/data.csv" aria-disabled="true" tabindex="-1"><span class="file-extension">CSV</span><span><strong>数据明细</strong><small>当前统计范围</small></span><span aria-hidden="true">↓</span></a>
+      <a class="download-link" data-file="/files/analysis.xlsx" aria-disabled="true" tabindex="-1"><span class="file-extension">XLSX</span><span><strong>Excel</strong><small>明细与分类汇总</small></span><span aria-hidden="true">↓</span></a>
+      <a class="download-link" data-file="/files/report.html" aria-disabled="true" tabindex="-1"><span class="file-extension">HTML</span><span><strong>离线交互报告</strong><small>含交互图表</small></span><span aria-hidden="true">↓</span></a>
+      <a class="download-link" data-file="/files/analysis.json" aria-disabled="true" tabindex="-1"><span class="file-extension">JSON</span><span><strong>分析 JSON</strong><small>统计与执行证据</small></span><span aria-hidden="true">↓</span></a>
+    </div>
+    <details class="technical-details"><summary>查看结果来源</summary><div id="identity" class="mono identity-list">分析结果尚未发布</div></details>
+  </section>
+</main>
+</body>
+</html>

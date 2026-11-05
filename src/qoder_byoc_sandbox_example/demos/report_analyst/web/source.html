@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>报表数据源 · Agent Sandbox 极速版</title><link rel="stylesheet" href="/assets/style.css"><script src="/assets/source.js" defer></script></head>
+<body class="source-page">
+<header class="source-header"><div><a href="/" class="back-link">← 返回演示</a><div class="product-name">报表数据源 <span class="badge badge-outline">合成演示数据</span></div></div><span class="muted">Agent Sandbox 极速版</span></header>
+<main class="source-content">
+  <div class="source-intro"><span class="eyebrow">DATA SOURCE</span><h1>资源用量明细</h1><p>选择月份和地区，查看并下载对应报表。数据固定生成，不包含客户信息。</p></div>
+  <section class="filter-panel" aria-label="报表筛选">
+    <label>月份<select id="month"><option value="">全部月份</option><option value="2026-09">2026 年 9 月</option><option value="2026-10">2026 年 10 月</option></select></label>
+    <label>地区<select id="region"><option value="全部">全部地区</option><option>华东</option><option>华南</option><option>华北</option></select></label>
+    <button class="button button-primary" id="apply" type="button">应用筛选</button>
+    <a class="button" id="download" aria-disabled="true" tabindex="-1">下载筛选后的 CSV</a>
+  </section>
+  <div class="inline-alert" id="source-error" role="status" hidden><span>报表数据读取失败，请检查执行环境后重试。</span><button class="button button-small" id="retry-source" type="button">重新加载</button></div>
+  <section class="table-panel">
+    <div class="table-heading"><h2>明细记录</h2><span class="data-count" id="count" role="status">正在读取</span></div>
+    <div class="table-scroll"><table><thead><tr><th scope="col">日期</th><th scope="col">分类</th><th scope="col">地区</th><th scope="col" class="numeric">金额</th></tr></thead><tbody id="body"><tr><td colspan="4" class="table-empty">正在读取报表数据…</td></tr></tbody></table></div>
+    <div class="table-footer"><span id="page" class="muted"></span><div class="row"><button class="button button-small" id="prev" type="button" disabled>上一页</button><button class="button button-small" id="next" type="button" disabled>下一页</button></div></div>
+  </section>
+</main>
+</body>
+</html>

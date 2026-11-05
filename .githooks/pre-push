@@ -1,0 +1,10 @@
+#!/bin/sh
+# Optional local guard; enable with: git config core.hooksPath .githooks
+set -eu
+root=$(git rev-parse --show-toplevel)
+cd "$root"
+if [ -x .venv/bin/python ]; then
+  exec .venv/bin/python scripts/check_publish.py --history
+fi
+printf '%s\n' 'Publication check requires project dependencies. Create .venv first; push stopped.' >&2
+exit 1

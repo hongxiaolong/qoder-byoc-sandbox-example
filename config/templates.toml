@@ -1,0 +1,17 @@
+[browser]
+name_prefix="qoder-byoc-sandbox-web"
+image="fc-e2b-registry.cn-hangzhou.cr.aliyuncs.com/runtime/browser:v0.0.44"
+cpu=4
+memory_mb=8192
+start_command="sudo -E /usr/local/bin/start-browsertool.sh"
+ready_command="curl -fsS http://127.0.0.1:3000/health"
+
+[analysis]
+name_prefix="qoder-byoc-sandbox-python"
+dockerfile="images/report_analyst/Dockerfile"
+cpu=2
+memory_mb=4096
+disk_mb=15360
+generation=2
+start_command="cd /opt/demo && PYTHONPATH=/opt/demo/src python3 -m qoder_byoc_sandbox_example.demos.report_analyst.service --root /workspace --port 8000"
+ready_command="curl -fsS http://127.0.0.1:8000/health"

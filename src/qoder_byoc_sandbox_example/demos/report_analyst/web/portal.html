@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Qoder Cloud Agents × Agent Sandbox 极速版：观察 Session、Worker 与两个 Sandbox 的真实执行链路。"
+    />
+    <title>Qoder Cloud Agents × Agent Sandbox 极速版：BYOC 接入实战</title>
+    <link rel="icon" href="/assets/qoder.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/live.css" />
+    <script src="/assets/live.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#event-list">跳到事件轨迹</a>
+    <header class="brandbar">
+      <div class="brands">
+        <img class="qoder-logo" src="/assets/qoder.svg" alt="" /><strong
+          >Qoder Cloud Agents</strong
+        ><span class="brand-cross">×</span
+        ><img
+          class="sandbox-logo"
+          src="/assets/agent-sandbox.png"
+          alt="Agent Sandbox"
+        /><span class="edition">极速版</span>
+      </div>
+      <div class="header-actions">
+        <span class="status" id="connection-status" role="status"
+          >正在连接</span
+        >
+        <button
+          id="refresh"
+          class="icon-button"
+          type="button"
+          aria-label="刷新观察"
+        >
+          <img class="icon" src="/assets/icons/refresh.svg" alt="" />
+        </button>
+        <div class="theme-switch" role="group" aria-label="背景主题">
+          <button
+            id="theme-light"
+            type="button"
+            aria-label="浅色背景"
+            aria-pressed="true"
+          >
+            <img class="icon" src="/assets/icons/sun.svg" alt="" />
+          </button>
+          <button
+            id="theme-dark"
+            type="button"
+            aria-label="深色背景"
+            aria-pressed="false"
+          >
+            <img class="icon" src="/assets/icons/moon.svg" alt="" />
+          </button>
+        </div>
+        <a
+          id="session-link"
+          class="quiet-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-disabled="true"
+          >打开 Qoder
+          <img class="icon" src="/assets/icons/arrow-up-right.svg" alt=""
+        /></a>
+      </div>
+    </header>
+    <h1 class="sr-only">Qoder Cloud Agents × Agent Sandbox 极速版：BYOC 接入实战</h1>
+    <main>
+      <div
+        id="diagram-viewport"
+        class="diagram-viewport"
+        tabindex="0"
+        aria-label="架构现场，可在区域内滚动查看"
+      >
+        <section
+          id="architecture"
+          class="architecture"
+          aria-label="会话输入与架构运行现场"
+        >
+          <svg id="flow-svg" class="flow-svg" aria-hidden="true">
+            <defs>
+              <marker
+                id="flow-arrow"
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="5"
+                markerHeight="5"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"></path>
+              </marker>
+            </defs>
+            <g id="flow-paths"></g>
+          </svg>
+          <aside class="input-pane" id="input-node">
+            <div class="pane-title">
+              <h2>会话输入</h2>
+              <span class="readonly">只读</span>
+            </div>
+            <div id="input-session" class="resource-id"></div>
+            <div id="turns" class="turns">
+              <p class="empty">
+                在 start.sh 或 Qoder 控制台发送消息，输入记录将在这里出现。
+              </p>
+            </div>
+          </aside>
+          <section class="cloud group" aria-labelledby="cloud-title">
+            <div class="group-heading">
+              <h2 id="cloud-title">
+                <img class="icon qoder-logo" src="/assets/qoder.svg" alt="" />
+                Qoder Cloud Agents
+              </h2>
+            </div>
+            <div class="cloud-grid">
+              <div class="agent-resources">
+                <section
+                  id="agent-node"
+                  class="node resource-node"
+                  data-resource="agent"
+                >
+                  <div class="node-heading">
+                    <img class="icon" src="/assets/icons/cube.svg" alt="" />
+                    <h3>Agent · 定义</h3>
+                  </div>
+                  <div id="agent-id" class="resource-id"></div>
+                </section>
+                <section
+                  id="skills-node"
+                  class="node resource-node"
+                  data-resource="skill"
+                >
+                  <div class="node-heading">
+                    <img
+                      class="icon"
+                      src="/assets/icons/file-code.svg"
+                      alt=""
+                    />
+                    <h3>Skills · report-analysis</h3>
+                  </div>
+                  <div id="skill-id" class="resource-id"></div>
+                  <p>Agent 已绑定 · Read 读取 SKILL.md</p>
+                </section>
+                <section
+                  id="session-node"
+                  class="node resource-node"
+                  data-resource="session"
+                >
+                  <div class="node-heading">
+                    <img class="icon" src="/assets/icons/message.svg" alt="" />
+                    <h3>Session · 会话</h3>
+                  </div>
+                  <div id="session-id" class="resource-id"></div>
+                  <small id="agent-version">使用 Agent · 版本待确认</small>
+                </section>
+                <section
+                  id="loop-node"
+                  class="node resource-node"
+                  data-resource="loop"
+                >
+                  <div class="node-heading">
+                    <img class="icon" src="/assets/icons/refresh.svg" alt="" />
+                    <h3>Managed Agent Loop</h3>
+                  </div>
+                  <p>LLM 理解需求 → 选择工具 → 根据结果继续</p>
+                  <small id="loop-status">等待 Session 事件</small>
+                </section>
+              </div>
+              <div class="cloud-interfaces">
+                <section
+                  id="queue-node"
+                  class="node resource-node"
+                  data-resource="queue"
+                >
+                  <div class="node-heading">
+                    <img class="icon" src="/assets/icons/cube.svg" alt="" />
+                    <h3>Work Queue</h3>
+                  </div>
+                  <p>Session 工作项 · 按 Environment ID 归属</p>
+                  <div class="queue-stats">
+                    <span>待领取 <b id="queue-depth">—</b></span
+                    ><span>待确认 <b id="queue-pending">—</b></span
+                    ><span
+                      title="最近 30 秒带 Worker-ID 轮询的不同 Worker 数，不表示在线总数"
+                      >近 30s 轮询 <b id="queue-pollers">—</b></span
+                    >
+                  </div>
+                  <div id="work-id" class="resource-id"></div>
+                  <div id="lease-status" class="status muted">
+                    租约状态待确认
+                  </div>
+                  <small id="queue-time">等待真实队列统计</small>
+                </section>
+                <section
+                  id="events-node"
+                  class="node resource-node"
+                  data-resource="events"
+                >
+                  <div class="node-heading">
+                    <img
+                      class="icon"
+                      src="/assets/icons/file-code.svg"
+                      alt=""
+                    />
+                    <h3>Session Events API</h3>
+                  </div>
+                  <div class="api-operation">
+                    <code>GET /sessions/{id}/events</code>
+                    <p>读取工具调用与公开消息</p>
+                  </div>
+                  <div class="api-operation">
+                    <code>POST /sessions/{id}/events</code>
+                    <p>回传对应工具调用的结果</p>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </section>
+          <section class="runtimes group" aria-labelledby="runtime-title">
+            <div class="group-heading runtime-heading">
+              <h2 id="runtime-title">
+                <img
+                  class="runtime-logo"
+                  src="/assets/agent-sandbox.png"
+                  alt="Agent Sandbox"
+                />
+                <span class="edition">极速版</span>
+              </h2>
+              <span
+                class="badge byoc-badge"
+                title="本演示的 Sandbox 运行在用户自己的阿里云账号中；BYOC 描述部署归属，不是 Sandbox 的版本。"
+                >BYOC</span
+              >
+            </div>
+            <div class="runtime-instances">
+              <section
+                id="environment-node"
+                class="environment resource-node"
+                data-resource="environment"
+              >
+                <div class="group-heading">
+                  <h2>Environment · self_hosted</h2>
+                </div>
+                <div id="environment-id" class="resource-id"></div>
+                <p class="mapping-note">本轮自托管执行映射</p>
+                <section
+                  id="analysis-node"
+                  class="node sandbox resource-node"
+                  data-resource="analysis"
+                >
+                  <div class="node-heading">
+                    <img class="icon" src="/assets/icons/cube.svg" alt="" />
+                    <h3>Analysis Sandbox</h3>
+                  </div>
+                  <div id="analysis-id" class="resource-id"></div>
+                  <div class="execution-modules">
+                    <button
+                      id="worker-node"
+                      class="module"
+                      data-resource="worker"
+                      type="button"
+                    >
+                      <img
+                        class="icon"
+                        src="/assets/icons/settings.svg"
+                        alt=""
+                      /><strong>Worker</strong
+                      ><small id="worker-status">等待心跳</small></button
+                    ><button
+                      id="python-node"
+                      class="module"
+                      data-resource="python"
+                      type="button"
+                    >
+                      <img
+                        class="icon"
+                        src="/assets/icons/brand-python.svg"
+                        alt=""
+                      /><strong>Python</strong><small>/workspace</small>
+                    </button>
+                  </div>
+                </section>
+              </section>
+              <section
+                id="browser-node"
+                class="node browser resource-node"
+                data-resource="browser"
+              >
+                <div class="node-heading">
+                  <img class="icon" src="/assets/icons/browser.svg" alt="" />
+                  <h3>Browser Sandbox</h3>
+                </div>
+                <div id="browser-id" class="resource-id"></div>
+                <div class="browser-module">
+                  <img
+                    class="icon"
+                    src="/assets/icons/browser.svg"
+                    alt=""
+                  /><strong>Chromium</strong
+                  ><span id="browser-status">远程浏览器工具</span>
+                </div>
+              </section>
+            </div>
+          </section>
+        </section>
+      </div>
+      <div
+        id="dock-resize"
+        class="dock-resize"
+        role="separator"
+        aria-orientation="horizontal"
+        aria-label="调整事件面板高度"
+        aria-valuemin="280"
+        aria-valuemax="700"
+        aria-valuenow="340"
+        tabindex="0"
+      >
+        <span></span>
+      </div>
+      <section id="trace-dock" class="trace-dock" aria-label="事件轨迹与详情">
+        <section class="event-pane">
+          <div class="trace-toolbar">
+            <h2>执行轨迹 <small id="event-count">0</small></h2>
+            <input
+              id="event-search"
+              type="search"
+              aria-label="搜索事件"
+              placeholder="搜索操作、API、Sandbox…"
+            /><button
+              id="follow-latest"
+              type="button"
+              aria-pressed="true"
+              title="跟随最新事件"
+            >
+              跟随最新
+            </button>
+          </div>
+          <div class="filters" role="group" aria-label="事件类型">
+            <select id="trace-view" aria-label="轨迹视图">
+              <option value="interactions">组件交互</option>
+              <option value="operations">执行视图</option>
+              <option value="events">原始事件</option>
+            </select>
+            <button data-filter="all" aria-pressed="true">全部</button
+            ><button data-filter="resource" aria-pressed="false">资源</button
+            ><button data-filter="work" aria-pressed="false">Work</button
+            ><button data-filter="tool" aria-pressed="false">工具</button
+            ><button data-filter="model" aria-pressed="false">模型</button
+            ><button data-filter="http" aria-pressed="false">API</button
+            ><button data-filter="heartbeat" aria-pressed="false">心跳</button
+            ><select id="trace-scope" aria-label="事件范围">
+              <option value="session">整个 Session</option>
+              <option value="input" disabled>选中对话</option>
+            </select>
+          </div>
+          <div class="event-scroll" id="event-list" tabindex="-1">
+            <table>
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>名称 / 事件</th>
+                  <th>关联 API</th>
+                  <th>执行位置</th>
+                  <th>耗时</th>
+                </tr>
+              </thead>
+              <tbody id="event-rows"></tbody>
+            </table>
+            <p id="events-empty" class="empty">
+              等待公开事件；此页面不会触发任务。
+            </p>
+          </div>
+          <div id="history-note" class="history-note" hidden>
+            当前显示最近记录；较早的原始事件仍可在 Qoder 会话中查看。
+          </div>
+        </section>
+        <section class="inspector" aria-label="选中事件详情">
+          <div class="inspector-tabs" role="tablist" aria-label="详情内容">
+            <button
+              id="detail-tab-io"
+              data-tab="io"
+              role="tab"
+              aria-selected="true"
+              aria-controls="event-detail"
+            >
+              输入 / 输出
+            </button>
+            <button
+              id="detail-tab-execution"
+              data-tab="execution"
+              role="tab"
+              aria-selected="false"
+              aria-controls="event-detail"
+            >
+              执行详情
+            </button>
+            <button
+              id="detail-tab-raw"
+              data-tab="raw"
+              role="tab"
+              aria-selected="false"
+              aria-controls="event-detail"
+            >
+              原始记录
+            </button>
+          </div>
+          <div
+            id="event-detail"
+            class="detail-body"
+            role="tabpanel"
+            aria-labelledby="detail-tab-io"
+          >
+            <div class="empty detail-empty">
+              <img class="icon" src="/assets/icons/terminal-2.svg" alt="" />
+              <h3>选择一条事件</h3>
+              <p>直接查看输入、输出、执行位置和实际耗时。</p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>

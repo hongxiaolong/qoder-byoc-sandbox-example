@@ -1,0 +1,12 @@
+{
+  "name": "qoder-byoc-sandbox-example",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Development-only DOM checks for the read-only observer",
+  "scripts": {
+    "test": "node --test tests/observer-ui.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}
